@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            
+            #liveScore { /* This builds the live score counter. */
+                position: absolute;
+                top: 0;
+                left: 0;
+                pointer-events: none;
+                color: azure;
+                font-size: medium;
+            }
+
+            .scrollCard 
+            {
+                position: relative;
+                width: 400px;
+                margin: 0 auto;
+                padding: 40px 30px;
+                background:
+                    radial-gradient(ellipse at top left, #f2e3b3, transparent 60%),
+                    radial-gradient(ellipse at bottom right, #b9835a, transparent 60%),
+                    linear-gradient(#e8d9ae, #c9ab6f);
+                border: 2px solid #5a3a1a;
+                    box-shadow: inset 0 0 25px rgba(90, 58, 26, 0.6),
+                    0 10px 30px rgba(0, 0, 0, 0.8);
+                color: #3b2a14;
+                font-size: 20px;
+                text-align: center;
+            }
+
+            .scrollCard::before,
+            .scrollCard::after
+            {
+                content: "";
+                position: absolute;
+                left: -15px;
+                right: -15px;
+                height: 22px;
+                background: linear-gradient(#7a4a1e, #4a2c10);
+                border-radius: 50%;
+            }
+
+            .scrollCard::before { top: -11px; }
+            .scrollCard::after  { bottom: -11px; }
+            
+        </style>
+    </head>
+    <body>
+        <script type="module" src="main.js"></script>
+        <div id="startMenu" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; align-items: center; justify-content: center;">
+
+        <div class="scrollCard">
+            <p>Click Play to fly and collect your gold as a dragon<br><br>
+            <p>How To Fly:<br><br>
+                Up Arrow is to pitch down.<br>
+                Dowm Arrow is to pitch up.<br>
+                Left Arrow is to roll left.<br>
+                Right Arrow is to roll right.<br>
+                "a" key is to yaw right.<br>
+                "d" key is to yaw left.</p>
+            <button onclick="start()">Play</button>
+        </div>
+    </div>
+
+        <p id="liveScore">Coin Count: 0</p>
+        
+
+        <div id="gameOver" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); align-items: center; justify-content: center;">
+
+        <div class="scrollCard">
+            <p>Game Over!</p>
+            <p id="scoreDisplay"></p>
+            <button class="styled_button" onclick="start()">Play Again?</button>
+        </div> 
+        </div>
+    </body>
+</html>
