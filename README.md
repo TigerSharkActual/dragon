@@ -35,3 +35,7 @@
 
   - [Three.js](https://threejs.org/) — 3D rendering
   - [Vite](https://vitejs.dev/) — dev server / build tool
+
+ ## Status
+ 
+ Comming soon: html refinement.
