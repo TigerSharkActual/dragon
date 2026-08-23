@@ -15,10 +15,16 @@
   **Requirements:** [Node.js](https://nodejs.org/) installed
 
   1. Clone the repo
+     ```
      git clone https://github.com/TigerSharkActual/dragon.git
+     ```
+     ```
      cd dragon
+     ```
   2. Install dependencies
+     ```
      npm install
+     ```
   3. Start the dev server
      ```
      npm run dev
