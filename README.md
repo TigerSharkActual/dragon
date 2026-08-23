@@ -27,6 +27,3 @@
 
   - [Three.js](https://threejs.org/) — 3D rendering
   - [Vite](https://vitejs.dev/) — dev server / build tool
-
-  Type/paste this into your editor to replace README.md's contents, save, then run the add → commit → pull
-  --no-rebase → push sequence from my last message to get it synced to GitHub.
