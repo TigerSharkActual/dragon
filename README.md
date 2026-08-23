@@ -16,11 +16,11 @@
 
   1. Clone the repo
      git clone https://github.com/TigerSharkActual/dragon.git
-     cd dragon
+    ``` cd dragon
   2. Install dependencies
-     npm install
+     ```npm install
   3. Start the dev server
-     npm run dev
+     ```npm run dev
   4. Open the local URL printed in the terminal (usually `http://localhost:5173`)
 
   ## Built With
