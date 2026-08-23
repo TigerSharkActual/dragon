@@ -20,8 +20,9 @@
   2. Install dependencies
      npm install
   3. Start the dev server
+     ```
      npm run dev
-     ```npm run dev```
+     ```
   4. Open the local URL printed in the terminal (usually `http://localhost:5173`)
 
   ## Built With
