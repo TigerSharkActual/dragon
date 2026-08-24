@@ -6,14 +6,19 @@
                 margin: 0;
                 padding: 0;
             }
-            
+            @font-face {
+                font-family: 'Norse';
+                src: url(fonts/Norse.otf) format("opentype");
+            }
             #liveScore { /* This builds the live score counter. */
                 position: absolute;
                 top: 0;
                 left: 0;
                 pointer-events: none;
                 color: azure;
+                font-family: 'Norse', cursive;
                 font-size: medium;
+                display: none;
             }
 
             .scrollCard 
@@ -30,6 +35,7 @@
                     box-shadow: inset 0 0 25px rgba(90, 58, 26, 0.6),
                     0 10px 30px rgba(0, 0, 0, 0.8);
                 color: #3b2a14;
+                font-family: 'Norse', cursive;
                 font-size: 20px;
                 text-align: center;
             }
@@ -43,11 +49,49 @@
                 right: -15px;
                 height: 22px;
                 background: linear-gradient(#7a4a1e, #4a2c10);
-                border-radius: 50%;
+                border-radius: 11px;
             }
 
             .scrollCard::before { top: -11px; }
             .scrollCard::after  { bottom: -11px; }
+            
+            .scrollHandle
+            {
+                position: absolute;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                background: radial-gradient(circle at 35% 35%, #9a6a35, #4a2c10 70%);
+                z-index: 2;
+            }
+
+            .handle-top-left     {top: -15px; left: -25px}
+            .handle-top-right    {top: -15px; right: -25px}
+            .handle-bottom-left  {bottom: -15px; left: -25px}
+            .handle-bottom-right {bottom: -15px; right: -25px}
+
+            .scrollButton
+            {
+                font-family: 'Norse', cursive;
+                font-size: 20px;
+                padding: 10px 24px;
+                margin-top: 10px;
+                background: linear-gradient(#8a5a2a, #5a3a1a);
+                color: #f2e3b3;
+                border: 2px solid #3b2a14;
+                border-radius: 8px;
+                cursor: pointer;
+                box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+            }
+            .scrollButton:hover
+            {
+                background: linear-gradient(#9a6a35, #6a4a20);
+            }
+            .scrollButton:active
+            {
+                transform: translateY(2px);
+                box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+            }
             
         </style>
     </head>
@@ -56,6 +100,10 @@
         <div id="startMenu" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; align-items: center; justify-content: center;">
 
         <div class="scrollCard">
+            <span class="scrollHandle handle-top-left"></span>
+            <span class="scrollHandle handle-top-right"></span>
+            <span class="scrollHandle handle-bottom-left"></span>
+            <span class="scrollHandle handle-bottom-right"></span>
             <p>Click Play to fly and collect your gold as a dragon<br><br>
             <p>How To Fly:<br><br>
                 Up Arrow is to pitch down.<br>
@@ -64,7 +112,7 @@
                 Right Arrow is to roll right.<br>
                 "a" key is to yaw right.<br>
                 "d" key is to yaw left.</p>
-            <button onclick="start()">Play</button>
+            <button class="scrollButton" onclick="start()">Play</button>
         </div>
     </div>
 
@@ -76,7 +124,7 @@
         <div class="scrollCard">
             <p>Game Over!</p>
             <p id="scoreDisplay"></p>
-            <button class="styled_button" onclick="start()">Play Again?</button>
+            <button class="scrollButton" onclick="start()">Play Again?</button>
         </div> 
         </div>
     </body>

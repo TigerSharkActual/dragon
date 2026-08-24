@@ -14,14 +14,28 @@ window.addEventListener('keyup', function(event) {
     keys[event.key] = false;
 });
 
-let renderer = null; // This is where the program can assess if this is the first time the game is being played and if not line 23 will remove the old canvas.
+let renderer = null; // This is where the program can assess if this is the first time the game is being 
+let scene = null;                    // played and if not line 23 will remove the old canvas.
+let animationID = null;
 
 function start() 
 {
+    document.getElementById('liveScore').style.display = 'none';
+    document.getElementById('liveScore').style.display = 'block';
     document.getElementById('gameOver').style.display = 'none';
     if (renderer != null)
     {
-        renderer.domElement.remove()
+        scene.traverse((object) => {
+            if (object.geometry) object.geometry.dispose();
+            if (object.material) object.material.dispose();
+        });
+        renderer.dispose();
+        renderer.domElement.remove();
+    }
+
+    if (animationID != null) 
+    {
+        cancelAnimationFrame(animationID);
     }
     document.getElementById('startMenu').style.display = 'none';
     renderer = new THREE.WebGLRenderer();
@@ -29,7 +43,7 @@ function start()
     document.body.appendChild(renderer.domElement);
 
     //camera
-    const scene = new THREE.Scene();
+    scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
     camera.position.set(0, 1, 3);
 
@@ -121,8 +135,6 @@ function start()
     coin.position.multiplyScalar(Math.random() * 490);
     }
     spawnCoin();
-
-    let animationID;
 
     function animate() {
         animationID = requestAnimationFrame(animate);
