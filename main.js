@@ -67,9 +67,9 @@ function start()
     const noiseScale = 5;
 
     // This provides the colors for the terrain.
-    const valleyColer = new THREE.Color(0x1b3a5c);
-    const midColor = new THREE.Color(0x008800);
-    const peakColor = new THREE.Color(0xf2e394);
+    const valleyColer = new THREE.Color('#CD853F');
+    const midColor = new THREE.Color('#228B22');
+    const peakColor = new THREE.Color('#FFFAFA');
 
     function terrainRadius(direction)
     {
@@ -83,12 +83,12 @@ function start()
     }
 
     // The Sun's point light.
-    const sun_point_light = new THREE.PointLight(0xffffff, 2, 0, 0); // color, intensity, no falloff distance.
+    const sun_point_light = new THREE.PointLight('#FFDEAD', 2, 0, 0); // color, intensity, no falloff distance.
     sun_point_light.position.set(0, 0, 0);
     sun_point_light.castShadow = true;
     sun_point_light.shadow.mapSize.set(1024, 1024);
     sun_point_light.shadow.camera.near = 1;
-    sun_point_light.shadow.camera.far = 600;
+    sun_point_light.shadow.camera.far = 1100;
     scene.add(sun_point_light);
 
     // The Sun's ambient light.
@@ -107,7 +107,7 @@ function start()
     //top sphere
     const geoSphereTop = new THREE.SphereGeometry(baseRadius, 64, 64);
     const matSphereTop = new THREE.MeshStandardMaterial({
-        color: 0xffffff,
+        color: '#FFFFFF',
         vertexColors: true,
         side: THREE.BackSide,
         roughness: 0.8, metalness: 0.1,
@@ -181,7 +181,8 @@ function start()
         const bodyGeom = new THREE.OctahedronGeometry(bodyRadius, 0);
         const bodyMaterial = new THREE.MeshStandardMaterial({
             color: '#a00b9d',
-            roughness: 0.8, metalness: 0.1});
+            roughness: 0.8, 
+            metalness: 0.1});
         const dragonBody = new THREE.Mesh(bodyGeom, bodyMaterial);
         dragonBody.castShadow = true;
         scene.add(dragonBody);
@@ -194,15 +195,28 @@ function start()
     let coinScore = 0;
 
     // Coin creation
-    const coinGeom = new THREE.CylinderGeometry(5, 5, 0.5);
-    const coinMaterial = new THREE.MeshStandardMaterial({color: '#f6ff53'});
-    const coin = new THREE.Mesh(coinGeom, coinMaterial);
-    scene.add(coin);
+    const coinGeom = new THREE.CylinderGeometry(10, 10, 0.5);
+    const coinMaterial = new THREE.MeshStandardMaterial({
+        color: '#ffd700',
+        roughness: 0.1,
+        metalness: 0.9,
+        emissive: '#ffd700',
+        emissiveIntensity: 0.6
+    });
+    const coinBatchSize = 5;
+    const coins = [];
+    for (let i = 0; i < coinBatchSize; i++)
+    {
+        const coin = new THREE.Mesh(coinGeom, coinMaterial);
+        scene.add(coin);
+        coins.push(coin);
+    }
+    let coinsRemaining = coinBatchSize;
 
     // Fart creation.
     const fart = []; // This holds the positions of all farts so that they do not disapear.
     const fartGeom = new THREE.OctahedronGeometry(10, 2);
-    const fartMaterial = new THREE.MeshStandardMaterial({color: '#3fea1c'});
+    const fartMaterial = new THREE.MeshStandardMaterial({color: '#9acd32'});
     const fartQueue = []; // This is where the pending fart position is held while the dragon flys though that space.
 
     function createFart(position) {
@@ -212,7 +226,7 @@ function start()
         fart.push(fartMesh);
     };
 
-    function spawnCoin() {
+    function placeCoin(coin) {
         coin.position.set(
         Math.random() * 2 -1,
         Math.random() * 2 -1,
@@ -220,8 +234,18 @@ function start()
     );
     coin.position.normalize();
     coin.position.multiplyScalar(50 + Math.random() * (((baseRadius - 10)) - 50));
+    coin.visible = true;
     }
-    spawnCoin();
+
+    function spawnCoinBatch()
+    {
+        for (const coin of coins)
+        {
+            placeCoin(coin);
+        }
+        coinsRemaining = coinBatchSize;
+    }
+    spawnCoinBatch();
 
     function animate() {
         animationID = requestAnimationFrame(animate);
@@ -231,12 +255,12 @@ function start()
         const rollQ = new THREE.Quaternion();
         const yawQ = new THREE.Quaternion();
         
-        if (keys['ArrowUp']) pitchQ.setFromAxisAngle(new THREE.Vector3(1, 0, 0), 0.05);
-        if (keys['ArrowDown']) pitchQ.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -0.05);
-        if (keys['ArrowRight']) rollQ.setFromAxisAngle(new THREE.Vector3(0, 0, 1), 0.05);
-        if (keys['ArrowLeft']) rollQ.setFromAxisAngle(new THREE.Vector3(0, 0, 1), -0.05);
-        if (keys['a']) yawQ.setFromAxisAngle(new THREE.Vector3(0, 1, 0), 0.05);
-        if (keys['d']) yawQ.setFromAxisAngle(new THREE.Vector3(0, 1, 0), -0.05);
+        if (keys['ArrowUp']) pitchQ.setFromAxisAngle(new THREE.Vector3(1, 0, 0), 0.025);
+        if (keys['ArrowDown']) pitchQ.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -0.025);
+        if (keys['ArrowRight']) rollQ.setFromAxisAngle(new THREE.Vector3(0, 0, 1), 0.025);
+        if (keys['ArrowLeft']) rollQ.setFromAxisAngle(new THREE.Vector3(0, 0, 1), -0.025);
+        if (keys['a']) yawQ.setFromAxisAngle(new THREE.Vector3(0, 1, 0), 0.025);
+        if (keys['d']) yawQ.setFromAxisAngle(new THREE.Vector3(0, 1, 0), -0.025);
         
         group.quaternion.multiply(pitchQ).multiply(rollQ).multiply(yawQ);
         
@@ -272,20 +296,34 @@ function start()
         camera.up.copy(localAxisY);
         camera.lookAt(group.position.clone().addScaledVector(direction, 15));
         
+        
+        
+        // Dragon eats coin
+        for (const coin of coins)
+        {
+            if (!coin.visible) continue;
+
         coin.rotateX(0.1); // Spins coin.
 
-
-        // Dragon eats coin
-        if (group.position.distanceTo(coin.position) < 10) {
+        if (group.position.distanceTo(coin.position) <= 12) 
+            {
             createBodySegment();
             fartQueue.push({position: coin.position.clone(), frame: posHistory.length})
-            spawnCoin();
+            coin.visible = false;
+            coinsRemaining--;
             coinScore++;
             document.getElementById('liveScore').textContent = "Coin Count: " + coinScore;
             if (coinScore % 5 == 0)
             {
                 Speed += (maxSpeed - Speed) * rate;
+                bodySegmentLag = Math.ceil(bodyRadius * 2 / Speed);
             }
+        }
+    }
+    
+    if (coinsRemaining === 0)
+        {
+            spawnCoinBatch();
         }
 
         for (let i = 0; i < fart.length; i++) {
